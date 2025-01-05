@@ -1,0 +1,12 @@
+.board {
+    display: grid;
+    grid-template-columns: repeat(8, 3.5rem);
+    grid-template-rows: repeat(8, 3.5rem);
+    margin: 20px auto;
+}
+
+.square {
+    width: 3.5rem;
+    height: 3.5rem;
+    border: 1px solid #ddd;
+}
