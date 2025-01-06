@@ -3,10 +3,10 @@ import { createSlice } from '@reduxjs/toolkit'
 const initialState = {
     commandListData: [],
     position: {
-        row: 0,
-        column: 0,
-        direction: 'NORTH',
-        color: 'WHITE'
+        row: null,
+        column: null,
+        direction: null,
+        color: null
     }
 }
 

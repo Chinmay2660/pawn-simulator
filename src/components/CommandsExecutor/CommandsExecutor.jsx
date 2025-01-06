@@ -1,31 +1,94 @@
 import { useState } from "react";
 import './CommandsExecutor.css';
-import { useDispatch } from "react-redux";
-import { setCommandList, resetCommandList } from "../../redux/Reducers/commandSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { setCommandList, resetCommandList, setPosition } from "../../redux/Reducers/commandSlice";
 
 const CommandsExecutor = () => {
     const dispatch = useDispatch()
+    const positionData = useSelector((state) => state.commandData.position)
     const [place, setPlace] = useState({
         row: null,
         column: null,
         direction: 'NORTH',
         color: 'WHITE'
     })
+    const [isPlaced, setIsPlaced] = useState(true)
+
+    const handlePawnPlacement = (row, column, direction, color) => {
+        if (row >= 0 && row < 8 && column >= 0 && column < 8) {
+            dispatch(setPosition({ row, column, direction, color }))
+            setIsPlaced(true);
+        }
+    }
+
+    const handleReport = () => {
+        if (!isPlaced) {
+            alert('Please place PAWN First!')
+            return;
+        }
+        alert(`Output: ${positionData.row},${positionData.column},${positionData.direction},${positionData.color}`);
+    }
+
+    const handleMovePawn = (forwardSteps) => {
+        if (!isPlaced) {
+            alert('Please place PAWN First!')
+            return;
+        }
+        let newRow = positionData?.row;
+        let newColumn = positionData?.column;
+
+        switch (positionData?.direction) {
+            case 'NORTH':
+                newColumn += forwardSteps;
+                break;
+            case 'EAST':
+                newRow += forwardSteps;
+                break;
+            case 'SOUTH':
+                newColumn -= forwardSteps;
+                break;
+            case 'WEST':
+                newRow -= forwardSteps;
+                break;
+            default:
+                break;
+        }
+
+        if (newRow >= 0 && newRow < 8 && newColumn >= 0 && newColumn < 8) {
+            dispatch(setPosition({ ...positionData, row: newRow, column: newColumn }))
+        }
+    }
+
+    const handleMoveLeftRightPawn = () => {
+        if (!isPlaced) {
+            alert('Please place PAWN First!')
+            return;
+        }
+    }
 
     const handleCommand = (command) => {
-        dispatch(setCommandList(command))
+        const originalCommand = command;
         const [commandType, commandValue] = command.split(' ');
-        console.log(commandType)
         switch (commandType) {
             case 'PLACE':
+                const [row, column, direction, color] = commandValue.split(',');
+                handlePawnPlacement(parseInt(row), parseInt(column), direction, color)
+                dispatch(setCommandList(originalCommand))
                 break;
             case 'MOVE':
+                handleMovePawn(parseInt(commandValue))
+                dispatch(setCommandList(originalCommand))
                 break;
             case 'LEFT':
+                handleMoveLeftRightPawn('LEFT')
+                dispatch(setCommandList(originalCommand))
                 break;
             case 'RIGHT':
+                handleMoveLeftRightPawn('RIGHT')
+                dispatch(setCommandList(originalCommand))
                 break;
             case 'REPORT':
+                handleReport()
                 break;
             default:
                 alert('Invalid command');
@@ -54,6 +117,12 @@ const CommandsExecutor = () => {
             direction: 'NORTH',
             color: 'WHITE'
         });
+        dispatch(setPosition({
+            row: null,
+            column: null,
+            direction: null,
+            color: null
+        }))
     }
 
     return (
