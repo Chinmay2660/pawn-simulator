@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
-    commandData: [],
+    commandListData: [],
     position: {
         row: 0,
         column: 0,
@@ -14,8 +14,8 @@ export const commandSlice = createSlice({
     name: 'command',
     initialState,
     reducers: {
-        setCommand: (state, action) => {
-            state.commandData = action.payload
+        setCommandList: (state, action) => {
+            state.commandListData = [action.payload, ...state.commandListData];
         },
         setPosition: (state, action) => {
             state.position = action.payload
@@ -23,6 +23,6 @@ export const commandSlice = createSlice({
     },
 })
 
-export const { setCommand, setPosition } = commandSlice.actions
+export const { setCommandList, setPosition } = commandSlice.actions
 
 export default commandSlice.reducer

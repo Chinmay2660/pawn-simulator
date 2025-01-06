@@ -1,9 +1,11 @@
+import { useSelector } from 'react-redux'
 import './CommandLogs.css'
 
 const CommandLogs = () => {
-  const commandList = ["PLACE 0, 0, NORTH, WHITE", "MOVE 2", "LEFT", "RIGHT", "LEFT", "OUTPUT: 0, 0, WEST, WHITE"]
+  const commandList = useSelector((state) => state.commandData.commandListData)
   return (
     <div className="commandlogs-container">
+      {console.log(commandList,"console")}
       {commandList?.length > 0 && commandList.map((list, index) => {
         return (
           <div className='command' key={index}>{list}</div>
