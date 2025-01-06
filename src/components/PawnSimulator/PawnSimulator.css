@@ -1,0 +1,8 @@
+.pawnSimulator-container{
+    display: flex;
+    flex-direction: row;
+}
+
+.controller-container{
+    margin-left: 5rem;
+}
