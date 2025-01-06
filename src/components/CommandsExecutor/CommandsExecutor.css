@@ -23,13 +23,13 @@
 
 .forward-controls {
     display: flex;
-    gap: 8px;
+    gap: 1rem;
     align-items: center;
 }
 
 .right-left-controls {
     display: flex;
-    gap: 8px;
+    gap: 1rem;
     align-items: center;
 }
 
@@ -51,4 +51,18 @@
 
 .report-btn:hover {
     background-color: #117a8b;
+}
+
+.reset-btn {
+    background-color: purple;
+}
+
+.reset-btn:hover {
+    background-color: #117a8b;
+}
+
+.final-btns{
+    display: flex;
+    justify-content: flex-start;
+    gap: 1rem;
 }

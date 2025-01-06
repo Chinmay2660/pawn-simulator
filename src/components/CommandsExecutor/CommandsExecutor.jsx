@@ -1,7 +1,10 @@
 import { useState } from "react";
 import './CommandsExecutor.css';
+import { useDispatch } from "react-redux";
+import { setCommandList, resetCommandList } from "../../redux/Reducers/commandSlice";
 
 const CommandsExecutor = () => {
+    const dispatch = useDispatch()
     const [place, setPlace] = useState({
         row: null,
         column: null,
@@ -10,6 +13,7 @@ const CommandsExecutor = () => {
     })
 
     const handleCommand = (command) => {
+        dispatch(setCommandList(command))
         const [commandType, commandValue] = command.split(' ');
         console.log(commandType)
         switch (commandType) {
@@ -29,12 +33,28 @@ const CommandsExecutor = () => {
     }
 
     const handlePlacement = (e) => {
+        e.preventDefault()
         if (place?.row.trim() && place?.column.trim()) {
             handleCommand(`PLACE ${place?.row},${place?.column},${place?.direction},${place?.color}`);
-            setRow('');
-            setColumn('');
+            setPlace((prevPlace) => ({
+                ...prevPlace,
+                row: '',
+                column: '',
+                direction: 'NORTH',
+                color: 'WHITE'
+            }));
         }
     };
+
+    const handleReset = () => {
+        dispatch(resetCommandList())
+        setPlace({
+            row: '',
+            column: '',
+            direction: 'NORTH',
+            color: 'WHITE'
+        });
+    }
 
     return (
         <div className="controls">
@@ -94,7 +114,10 @@ const CommandsExecutor = () => {
                 <button className="btn" onClick={() => handleCommand('RIGHT')}>Right</button>
             </div>
 
-            <button className='btn report-btn' onClick={() => handleCommand('REPORT')}>Report</button>
+            <div className='final-btns'>
+                <button className='btn report-btn' onClick={() => handleCommand('REPORT')}>Report</button>
+                <button className='btn reset-btn' onClick={handleReset}>Reset</button>
+            </div>
         </div>
     );
 };
