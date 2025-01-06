@@ -18,6 +18,7 @@ const CommandsExecutor = () => {
     const handlePawnPlacement = (row, column, direction, color) => {
         if (row >= 0 && row < 8 && column >= 0 && column < 8) {
             dispatch(setPosition({ row, column, direction, color }))
+            dispatch(setCommandList(`PLACE ${row}, ${column}, ${direction}, ${color}`))
             setIsPlaced(true);
         }
     }
@@ -27,11 +28,10 @@ const CommandsExecutor = () => {
             alert('Please place PAWN First!')
             return;
         }
-        dispatch(setCommandList(`Output: ${positionData.row},${positionData.column},${positionData.direction},${positionData.color}`))
+        dispatch(setCommandList(`Output: ${positionData.row}, ${positionData.column}, ${positionData.direction}, ${positionData.color}`))
     }
 
     const handleMovePawn = (forwardSteps) => {
-
         if (!isPlaced) {
             alert('Please place PAWN First!')
             return;
@@ -67,14 +67,23 @@ const CommandsExecutor = () => {
        
         if (newRow >= 0 && newRow < 8 && newColumn >= 0 && newColumn < 8) {
             dispatch(setPosition({ ...positionData, row: newRow, column: newColumn }))
+            dispatch(setCommandList(`MOVE ${steps}`));
         }
     }
 
-    const handleMoveLeftRightPawn = () => {
+    const handleMoveLeftRightPawn = (direction) => {
         if (!isPlaced) {
             alert('Please place PAWN First!')
             return;
         }
+        const directions = ['NORTH', 'EAST', 'SOUTH', 'WEST'];
+        let currentIndex = directions.indexOf(positionData.direction);
+        currentIndex = direction === 'LEFT'
+            ? (currentIndex - 1 + directions.length) % directions.length
+            : (currentIndex + 1) % directions.length;
+
+        dispatch(setPosition({ ...positionData, direction: directions[currentIndex] }));
+        dispatch(setCommandList(direction));
     }
 
     const handleCommand = (command) => {
@@ -84,18 +93,15 @@ const CommandsExecutor = () => {
             case 'PLACE':
                 const [row, column, direction, color] = commandValue.split(',');
                 handlePawnPlacement(parseInt(row), parseInt(column), direction, color)
-                dispatch(setCommandList(originalCommand))
                 break;
             case 'MOVE':
                 handleMovePawn(parseInt(commandValue))
                 break;
             case 'LEFT':
                 handleMoveLeftRightPawn('LEFT')
-                dispatch(setCommandList(originalCommand))
                 break;
             case 'RIGHT':
                 handleMoveLeftRightPawn('RIGHT')
-                dispatch(setCommandList(originalCommand))
                 break;
             case 'REPORT':
                 handleReport()
@@ -113,8 +119,6 @@ const CommandsExecutor = () => {
                 ...prevPlace,
                 row: '',
                 column: '',
-                direction: 'SOUTH',
-                color: 'WHITE'
             }));
         }
     };
