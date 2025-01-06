@@ -1,10 +1,13 @@
+import { useSelector } from 'react-redux';
 import './ChessBoard.css';
 
-const ChessBoard = ({ pawnPosition, boardSize }) => {
+const ChessBoard = () => {
+  const positionData = useSelector((state) => state.commandData.position);
+
   return (
     <div className="board">
-      {Array.from({ length: boardSize }, (_, rowIndex) =>
-        Array.from({ length: boardSize }, (_, columnIndex) => (
+      {Array.from({ length: 8 }, (_, rowIndex) =>
+        Array.from({ length: 8 }, (_, columnIndex) => (
           <div
             key={`${rowIndex}-${columnIndex}`}
             className={`square`}
