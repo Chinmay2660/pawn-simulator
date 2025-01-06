@@ -132,19 +132,25 @@ const CommandsExecutor = () => {
                     type="number"
                     placeholder="Row"
                     value={place?.row}
-                    onChange={(e) => setPlace((prevPlace) => ({
-                        ...prevPlace,
-                        row: e.target.value
-                    }))}
+                    onChange={(e) => {
+                        if (e.target.value < 0 || e.target.value > 7) return;
+                        setPlace((prevPlace) => ({
+                            ...prevPlace,
+                            row: e.target.value
+                        }))
+                    }}
                 />
                 <input
                     type="number"
                     placeholder="Column"
                     value={place?.column}
-                    onChange={(e) => setPlace((prevPlace) => ({
-                        ...prevPlace,
-                        column: e.target.value
-                    }))}
+                    onChange={(e) => {
+                        if (e.target.value < 0 || e.target.value > 7) return;
+                        setPlace((prevPlace) => ({
+                            ...prevPlace,
+                            column: e.target.value
+                        }))
+                    }}
                 />
                 <select
                     value={place?.direction}
