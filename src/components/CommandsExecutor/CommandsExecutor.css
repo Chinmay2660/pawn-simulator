@@ -1,0 +1,54 @@
+.controls {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 1.5rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    max-width: 400px;
+    margin: auto;
+    gap: 2rem
+}
+
+.place-controls {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+}
+
+.place-controls input {
+    width: 20%;
+    padding: 4px;
+}
+
+.forward-controls {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.right-left-controls {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.btn {
+    padding: 8px 12px;
+    background-color: #17a2b8;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background-color: #117a8b;
+}
+
+.report-btn {
+    background-color: green;
+}
+
+.report-btn:hover {
+    background-color: #117a8b;
+}
