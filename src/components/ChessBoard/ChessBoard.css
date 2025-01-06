@@ -10,3 +10,11 @@
     height: 3.5rem;
     border: 1px solid #ddd;
 }
+
+.pawn-position-white{
+    background-color: white; 
+}
+
+.pawn-position-black{
+    background-color: rgb(86, 33, 33); 
+}

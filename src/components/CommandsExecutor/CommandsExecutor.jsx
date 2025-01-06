@@ -6,10 +6,11 @@ import { setCommandList, resetCommandList, setPosition } from "../../redux/Reduc
 const CommandsExecutor = () => {
     const dispatch = useDispatch()
     const positionData = useSelector((state) => state.commandData.position)
+    const [isTwoSteps, setTwoSteps] = useState(false)
     const [place, setPlace] = useState({
         row: null,
         column: null,
-        direction: 'NORTH',
+        direction: 'SOUTH',
         color: 'WHITE'
     })
     const [isPlaced, setIsPlaced] = useState(true)
@@ -26,14 +27,24 @@ const CommandsExecutor = () => {
             alert('Please place PAWN First!')
             return;
         }
-        alert(`Output: ${positionData.row},${positionData.column},${positionData.direction},${positionData.color}`);
+        dispatch(setCommandList(`Output: ${positionData.row},${positionData.column},${positionData.direction},${positionData.color}`))
     }
 
     const handleMovePawn = (forwardSteps) => {
+
         if (!isPlaced) {
             alert('Please place PAWN First!')
             return;
         }
+        if (forwardSteps === 2) {
+            if (isTwoSteps) {
+                alert('Invalid Command!');
+                return;
+            }
+            setTwoSteps(true);
+        }
+        dispatch(setCommandList(`MOVE ${forwardSteps}`))
+
         let newRow = positionData?.row;
         let newColumn = positionData?.column;
 
@@ -51,9 +62,9 @@ const CommandsExecutor = () => {
                 newRow -= forwardSteps;
                 break;
             default:
-                break;
+                return;
         }
-
+       
         if (newRow >= 0 && newRow < 8 && newColumn >= 0 && newColumn < 8) {
             dispatch(setPosition({ ...positionData, row: newRow, column: newColumn }))
         }
@@ -77,7 +88,6 @@ const CommandsExecutor = () => {
                 break;
             case 'MOVE':
                 handleMovePawn(parseInt(commandValue))
-                dispatch(setCommandList(originalCommand))
                 break;
             case 'LEFT':
                 handleMoveLeftRightPawn('LEFT')
@@ -103,7 +113,7 @@ const CommandsExecutor = () => {
                 ...prevPlace,
                 row: '',
                 column: '',
-                direction: 'NORTH',
+                direction: 'SOUTH',
                 color: 'WHITE'
             }));
         }
@@ -111,10 +121,11 @@ const CommandsExecutor = () => {
 
     const handleReset = () => {
         dispatch(resetCommandList())
+        setIsPlaced(false)
         setPlace({
             row: '',
             column: '',
-            direction: 'NORTH',
+            direction: 'SOUTH',
             color: 'WHITE'
         });
         dispatch(setPosition({
@@ -123,6 +134,7 @@ const CommandsExecutor = () => {
             direction: null,
             color: null
         }))
+        setTwoSteps(false)
     }
 
     return (

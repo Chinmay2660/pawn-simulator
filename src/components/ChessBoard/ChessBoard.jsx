@@ -10,7 +10,9 @@ const ChessBoard = () => {
         Array.from({ length: 8 }, (_, columnIndex) => (
           <div
             key={`${rowIndex}-${columnIndex}`}
-            className={`square`}
+            className={`square 
+              ${positionData && positionData?.row === rowIndex && positionData?.column === columnIndex && positionData?.color === 'WHITE' ? 'pawn-position-white' :
+                positionData?.row === rowIndex && positionData?.column === columnIndex && positionData?.color === 'BLACK' ? 'pawn-position-black' : ''}`}
           >
           </div>
         ))
