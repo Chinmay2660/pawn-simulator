@@ -21,7 +21,7 @@
 
 ## Commands
 
-1. **PLACE X,Y,DIRECTION,COLOR**  
+1. **PLACE ROW,COLUMN,DIRECTION,COLOR**  
    Places the pawn at the specified position with the given direction and color.
    - Example: `PLACE 0,0,NORTH,WHITE`
    
@@ -61,7 +61,7 @@
 
 4. Open the application in your browser at http://localhost:5173.
 
-### Usage
+## Usage
 
 1. Enter the desired row, column, direction, and color in the input fields, then click the Place button.
 
