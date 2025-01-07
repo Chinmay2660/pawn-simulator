@@ -43,23 +43,22 @@ const CommandsExecutor = () => {
             }
             setTwoSteps(true);
         }
-        dispatch(setCommandList(`MOVE ${forwardSteps}`))
 
         let newRow = positionData?.row;
         let newColumn = positionData?.column;
 
         switch (positionData?.direction) {
             case 'NORTH':
-                newColumn += forwardSteps;
+                newRow -= forwardSteps;
                 break;
             case 'EAST':
-                newRow += forwardSteps;
+                newColumn += forwardSteps;
                 break;
             case 'SOUTH':
-                newColumn -= forwardSteps;
+                newRow += forwardSteps;
                 break;
             case 'WEST':
-                newRow -= forwardSteps;
+                newColumn -= forwardSteps;
                 break;
             default:
                 return;
@@ -67,7 +66,7 @@ const CommandsExecutor = () => {
        
         if (newRow >= 0 && newRow < 8 && newColumn >= 0 && newColumn < 8) {
             dispatch(setPosition({ ...positionData, row: newRow, column: newColumn }))
-            dispatch(setCommandList(`MOVE ${steps}`));
+            dispatch(setCommandList(`MOVE ${forwardSteps}`));
         }
     }
 
@@ -76,18 +75,21 @@ const CommandsExecutor = () => {
             alert('Please place PAWN First!')
             return;
         }
-        const directions = ['NORTH', 'EAST', 'SOUTH', 'WEST'];
-        let currentIndex = directions.indexOf(positionData.direction);
-        currentIndex = direction === 'LEFT'
-            ? (currentIndex - 1 + directions.length) % directions.length
-            : (currentIndex + 1) % directions.length;
+        const facing = ['NORTH', 'EAST', 'SOUTH', 'WEST'];
+        let currentIndex = facing.indexOf(positionData?.direction);
+        if(positionData?.direction === 'EAST' || positionData?.direction === 'SOUTH') {
+            currentIndex = direction === 'LEFT' ? currentIndex - 1 : currentIndex + 1;
+        } else if (positionData?.direction === 'WEST') {
+            currentIndex = direction === 'LEFT' ? currentIndex - 1 : 0;
+        } else if (positionData?.direction === 'NORTH') {
+            currentIndex = direction === 'LEFT' ? facing?.length - 1 : currentIndex + 1;
+        }
 
-        dispatch(setPosition({ ...positionData, direction: directions[currentIndex] }));
+        dispatch(setPosition({ ...positionData, direction: facing[currentIndex] }));
         dispatch(setCommandList(direction));
     }
 
     const handleCommand = (command) => {
-        const originalCommand = command;
         const [commandType, commandValue] = command.split(' ');
         switch (commandType) {
             case 'PLACE':
