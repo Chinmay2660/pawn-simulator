@@ -5,8 +5,8 @@ import { setCommandList, resetCommandList, setPosition } from "../../redux/Reduc
 
 const CommandsExecutor = () => {
     const dispatch = useDispatch()
-    const positionData = useSelector((state) => state.commandData.position)
-    const [isTwoSteps, setTwoSteps] = useState(false)
+    const position = useSelector((state) => state.commandData.position)
+    const [stepsMoved, setStepsMoved] = useState(false)
     const [place, setPlace] = useState({
         row: null,
         column: null,
@@ -25,29 +25,31 @@ const CommandsExecutor = () => {
 
     const handleReport = () => {
         if (!isPlaced) {
-            alert('Please place PAWN First!')
+            alert('Please place Pawn First!')
             return;
         }
-        dispatch(setCommandList(`Output: ${positionData.row}, ${positionData.column}, ${positionData.direction}, ${positionData.color}`))
+        dispatch(setCommandList(`Output: ${position?.row}, ${position?.column}, ${position?.direction}, ${position?.color}`))
     }
 
     const handleMovePawn = (forwardSteps) => {
         if (!isPlaced) {
-            alert('Please place PAWN First!')
+            alert('Please place Pawn First!')
             return;
         }
         if (forwardSteps === 2) {
-            if (isTwoSteps) {
+            if (stepsMoved) {
                 alert('Invalid Command!');
                 return;
             }
-            setTwoSteps(true);
+            setStepsMoved(true);
+        } else if (forwardSteps === 1) {
+            setStepsMoved(true);
         }
 
-        let newRow = positionData?.row;
-        let newColumn = positionData?.column;
+        let newRow = position?.row;
+        let newColumn = position?.column;
 
-        switch (positionData?.direction) {
+        switch (position?.direction) {
             case 'NORTH':
                 newRow -= forwardSteps;
                 break;
@@ -65,27 +67,27 @@ const CommandsExecutor = () => {
         }
        
         if (newRow >= 0 && newRow < 8 && newColumn >= 0 && newColumn < 8) {
-            dispatch(setPosition({ ...positionData, row: newRow, column: newColumn }))
+            dispatch(setPosition({ ...position, row: newRow, column: newColumn }))
             dispatch(setCommandList(`MOVE ${forwardSteps}`));
         }
     }
 
     const handleMoveLeftRightPawn = (direction) => {
         if (!isPlaced) {
-            alert('Please place PAWN First!')
+            alert('Please place Pawn First!')
             return;
         }
         const facing = ['NORTH', 'EAST', 'SOUTH', 'WEST'];
-        let currentIndex = facing.indexOf(positionData?.direction);
-        if(positionData?.direction === 'EAST' || positionData?.direction === 'SOUTH') {
+        let currentIndex = facing.indexOf(position?.direction);
+        if(position?.direction === 'EAST' || position?.direction === 'SOUTH') {
             currentIndex = direction === 'LEFT' ? currentIndex - 1 : currentIndex + 1;
-        } else if (positionData?.direction === 'WEST') {
+        } else if (position?.direction === 'WEST') {
             currentIndex = direction === 'LEFT' ? currentIndex - 1 : 0;
-        } else if (positionData?.direction === 'NORTH') {
+        } else if (position?.direction === 'NORTH') {
             currentIndex = direction === 'LEFT' ? facing?.length - 1 : currentIndex + 1;
         }
 
-        dispatch(setPosition({ ...positionData, direction: facing[currentIndex] }));
+        dispatch(setPosition({ ...position, direction: facing[currentIndex] }));
         dispatch(setCommandList(direction));
     }
 
@@ -140,7 +142,7 @@ const CommandsExecutor = () => {
             direction: null,
             color: null
         }))
-        setTwoSteps(false)
+        setStepsMoved(false)
     }
 
     return (
