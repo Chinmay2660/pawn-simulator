@@ -16,7 +16,7 @@ const CommandsExecutor = () => {
     const [isPlaced, setIsPlaced] = useState(true)
 
     const handlePawnPlacement = (row, column, direction, color) => {
-        if (row >= 0 && row < 8 && column >= 0 && column < 8) {
+        if (row >= 0 && row < 8 && column >= 0 && column < 8) { // validation to avoid PAWN to fall of the board
             dispatch(setPosition({ row, column, direction, color }))
             dispatch(setCommandList(`PLACE ${row}, ${column}, ${direction}, ${color}`))
             setIsPlaced(true);
@@ -37,13 +37,13 @@ const CommandsExecutor = () => {
             return;
         }
         if (forwardSteps === 2) {
-            if (stepsMoved) {
+            if (stepsMoved) { // if any command 1 or 2 places is already moved then throw error
                 alert('Invalid Command!');
                 return;
             }
-            setStepsMoved(true);
+            setStepsMoved(true); //set 2 as already moved
         } else if (forwardSteps === 1) {
-            setStepsMoved(true);
+            setStepsMoved(true); //set 1 as already moved
         }
 
         let newRow = position?.row;
@@ -51,22 +51,22 @@ const CommandsExecutor = () => {
 
         switch (position?.direction) {
             case 'NORTH':
-                newRow -= forwardSteps;
+                newRow -= forwardSteps; // for north shift rows from (1,1) -> (0,1)
                 break;
             case 'EAST':
-                newColumn += forwardSteps;
+                newColumn += forwardSteps; // for north shift rows from (0,0) -> (0,1)
                 break;
             case 'SOUTH':
-                newRow += forwardSteps;
+                newRow += forwardSteps; // for south shift rows from (0,1) -> (1,1)
                 break;
             case 'WEST':
-                newColumn -= forwardSteps;
+                newColumn -= forwardSteps; // for west shift rows from (0,1) -> (0,0)
                 break;
             default:
                 return;
         }
        
-        if (newRow >= 0 && newRow < 8 && newColumn >= 0 && newColumn < 8) {
+        if (newRow >= 0 && newRow < 8 && newColumn >= 0 && newColumn < 8) { // validation to avoid PAWN to fall of the board
             dispatch(setPosition({ ...position, row: newRow, column: newColumn }))
             dispatch(setCommandList(`MOVE ${forwardSteps}`));
         }
@@ -80,11 +80,11 @@ const CommandsExecutor = () => {
         const facing = ['NORTH', 'EAST', 'SOUTH', 'WEST'];
         let currentIndex = facing.indexOf(position?.direction);
         if(position?.direction === 'EAST' || position?.direction === 'SOUTH') {
-            currentIndex = direction === 'LEFT' ? currentIndex - 1 : currentIndex + 1;
+            currentIndex = direction === 'LEFT' ? currentIndex - 1 : currentIndex + 1; // east and south both have elements on left and right in facing array
         } else if (position?.direction === 'WEST') {
-            currentIndex = direction === 'LEFT' ? currentIndex - 1 : 0;
+            currentIndex = direction === 'LEFT' ? currentIndex - 1 : 0; // west only have elements on left and right it doesnt have. As the facing array ends, by default first elemnent will be in right of west
         } else if (position?.direction === 'NORTH') {
-            currentIndex = direction === 'LEFT' ? facing?.length - 1 : currentIndex + 1;
+            currentIndex = direction === 'LEFT' ? facing?.length - 1 : currentIndex + 1; // north only have elements on right and left it doesnt have. As the facing array starts to right, by default last elemnent will be in left of north
         }
 
         dispatch(setPosition({ ...position, direction: facing[currentIndex] }));
@@ -99,13 +99,13 @@ const CommandsExecutor = () => {
                 handlePawnPlacement(parseInt(row), parseInt(column), direction, color)
                 break;
             case 'MOVE':
-                handleMovePawn(parseInt(commandValue))
+                handleMovePawn(parseInt(commandValue)) // commandValue = 1 or 2
                 break;
             case 'LEFT':
-                handleMoveLeftRightPawn('LEFT')
+                handleMoveLeftRightPawn(commandType)
                 break;
             case 'RIGHT':
-                handleMoveLeftRightPawn('RIGHT')
+                handleMoveLeftRightPawn(commandType)
                 break;
             case 'REPORT':
                 handleReport()

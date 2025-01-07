@@ -15,10 +15,10 @@ export const commandSlice = createSlice({
     initialState,
     reducers: {
         setCommandList: (state, action) => {
-            state.commandListData = [action.payload, ...state.commandListData];
+            state.commandListData = [action.payload, ...state.commandListData]; // new data first and then old data
         },
         resetCommandList: (state, action) => {
-            state.commandListData = [];
+            state.commandListData = []; // reset reducer to clear
         },
         setPosition: (state, action) => {
             state.position = action.payload

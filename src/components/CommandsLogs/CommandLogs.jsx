@@ -11,7 +11,7 @@ const CommandLogs = () => {
         )
       })}
       {commandList?.length === 0 && (
-        <div className='command' >No command found</div>
+        <div className='command' >No command found</div> // if list empty then show No command found
       )}
     </div>
   )

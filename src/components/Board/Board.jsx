@@ -2,17 +2,17 @@ import { useSelector } from 'react-redux';
 import './Board.css';
 
 const Board = () => {
-  const positionData = useSelector((state) => state.commandData.position);
+  const position = useSelector((state) => state.commandData.position);
 
   return (
     <div className="board">
-      {Array.from({ length: 8 }, (_, row) =>
-        Array.from({ length: 8 }, (_, column) => (
+      {Array.from({ length: 8 }, (_, row) =>  //for rows
+        Array.from({ length: 8 }, (_, column) => (  //for columns
           <div
-            key={`${row}-${column}`}
+            key={`${row}-${column}`}  // 0-0
             className={`square 
-              ${positionData && positionData?.row === row && positionData?.column === column && positionData?.color === 'WHITE' ? 'pawn-position-white' :
-                positionData?.row === row && positionData?.column === column && positionData?.color === 'BLACK' ? 'pawn-position-black' : ''}`}
+              ${position && position?.row === row && position?.column === column && position?.color === 'WHITE' ? 'pawn-position-white' :
+                position?.row === row && position?.column === column && position?.color === 'BLACK' ? 'pawn-position-black' : ''}`}
           >
           </div>
         ))
